@@ -1,7 +1,7 @@
 module Model 
     module Direction
         UP = :up
-        RIGTH = :rigth
+        RIGHT = :right
         DOWN = :down
         LEFT = :left
     end

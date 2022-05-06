@@ -25,39 +25,37 @@ module Actions
     def self.calc_next_position(state)
         curr_position = state.snake.positions.first
         case state.curr_direction
-            when Model::Direction::UP 
-                # decrementar fila
-                return Model::Coord.new(
-                    curr_position.row -1,
-                    curr_position.col   
-                ) 
-            when Model::Direction::RIGTH
-                # incrementar col
-                return Model::Coord.new(
-                    curr_position.row,
-                    curr_position.col + 1
-                ) 
-            when Model::Direction::DOWN
-                # incrementar fila
-                return Model::Coord.new(
-                    curr_position.row + 1,
-                    curr_position.col   
-                ) 
-            when Model::Direction::LEFT
-                # decrementar col
-                return Model::Coord.new(
-                    curr_position.row,
-                    curr_position.col - 1   
-                ) 
+        when Model::Direction::UP
+        # decrementar fila
+        return Model::Coord.new(
+            curr_position.row - 1, 
+            curr_position.col)
+        when Model::Direction::RIGHT
+        # incrementar col
+        return Model::Coord.new(
+            curr_position.row, 
+            curr_position.col + 1)
+        when Model::Direction::DOWN
+        # incrementar fila
+        return Model::Coord.new(
+            curr_position.row + 1,
+            curr_position.col)
+        when Model::Direction::LEFT
+        # decrementar col
+        return Model::Coord.new(
+            curr_position.row, 
+            curr_position.col - 1)
         end
     end
 
     def self.position_is_valid?(state, position)
-        # verificar que este en la grilla
-        is_invalid = ((position.row >= state.grid.rows || position.row < 0) || (position.col >= state.grid.rows || position.col < 0))
+        # verificar q este en la grilla
+        is_invalid = ((position.row >= state.grid.rows ||
+            position.row < 0) || 
+            (position.col >= state.grid.cols ||
+            position.col < 0))
         return false if is_invalid
-
-        # verificar que no este super poniendo a la snake
+        # verificar q no este superponiendo a la serpiente
         return !(state.snake.positions.include? position)
     end
 
@@ -78,10 +76,10 @@ module Actions
                 return true if direction != Model::Direction::DOWN
             when Model::Direction::DOWN
                 return true if direction != Model::Direction::UP
-            when Model::Direction::RIGTH
+            when Model::Direction::RIGHT
                 return true if direction != Model::Direction::LEFT
             when Model::Direction::LEFT
-                return true if direction != Model::Direction::RIGTH
+                return true if direction != Model::Direction::RIGHT
         end
         return false
     end

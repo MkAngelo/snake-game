@@ -4,8 +4,9 @@ require_relative "../model/state"
 module View
     class Ruby2dView
 
-        def initialize
+        def initialize(app)
             @pixel_size = 50
+            @app = app
         end
         
         def start(state)
@@ -13,11 +14,18 @@ module View
             set(
                 title: "Snake", 
                 width: @pixel_size * state.grid.cols, 
-                height: @pixel_size * state.grid.rows)
+                height: @pixel_size * state.grid.rows
+            )
+            on :key_down do |event|
+                # A key was pressed
+                handle_key_event(event)
+                # puts event.key
+            end
             show
         end
 
         def render_game(state)
+            extend Ruby2D::DSL
             render_food(state)
             render_snake(state)
         end
@@ -28,11 +36,10 @@ module View
             @food.remove if @food
             extend Ruby2D::DSL
             food = state.food
-            @food = Circle.new(
-                x: food.col * @pixel_size, 
+            @food = Square.new(
+                x: food.col * @pixel_size,
                 y: food.row * @pixel_size,
-                radius: @pixel_size / 2,
-                #sectors: 32,
+                size: @pixel_size,
                 color: 'yellow'
             )
         end
@@ -48,6 +55,23 @@ module View
                     size: @pixel_size,
                     color: 'green'
                 )
+            end
+        end
+
+        def handle_key_event(event)
+            case event.key
+                when "up"
+                    # Cambiar direccion hacia arriba
+                    @app.send_action(:change_direction, Model::Direction::UP)
+                when "down"
+                    # Cambiar direccion hacia abajo
+                    @app.send_action(:change_direction, Model::Direction::DOWN)
+                when "right"
+                    # Cambiar direccion hacia derecha
+                    @app.send_action(:change_direction, Model::Direction::RIGHT)
+                when "left"
+                    # Cambiar direccion hacia izquierda
+                    @app.send_action(:change_direction, Model::Direction::LEFT)
             end
         end
     end
